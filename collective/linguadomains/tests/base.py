@@ -12,10 +12,10 @@ class UnitTestCase(unittest.TestCase):
 
 class IntegrationTestCase(unittest.TestCase):
 
-    layer = layer.INTEGRATION
+    layer = testing.INTEGRATION
 
     def setUp(self):
-        super(TestCase, self).setUp()
+        super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
         testing.setRoles(self.portal, testing.TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory('Folder', 'test-folder')
@@ -25,8 +25,9 @@ class IntegrationTestCase(unittest.TestCase):
 
 class FunctionalTestCase(IntegrationTestCase):
 
-    layer = layer.FUNCTIONAL
+    layer = testing.FUNCTIONAL
 
     def setUp(self):
+        super(FunctionalTestCase, self).setUp()
         #we must commit the transaction
         transaction.commit()

@@ -1,0 +1,1 @@
+from collective.linguadomains.controlpanel import ISettingsSchema

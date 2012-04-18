@@ -7,7 +7,7 @@ setup(name='collective.linguadomains',
       version=version,
       description="Manage translated domains for Plone",
       long_description=open("README.rst").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+                       open("CHANGES.txt").read(),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
@@ -17,10 +17,10 @@ setup(name='collective.linguadomains',
         "Framework :: Plone :: 4.1",
         "Framework :: Plone :: 4.2",
         ],
-      keywords='',
-      author='',
-      author_email='',
-      url='http://svn.plone.org/svn/collective/',
+      keywords='plone multilanguages linguaplone multidomains',
+      author='JeanMichel FRANCOIS aka toutpt',
+      author_email='toutpt@gmail.com',
+      url='https://github.com/collective/collective.linguadomains',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['collective'],
@@ -28,6 +28,8 @@ setup(name='collective.linguadomains',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.app.registry',
+          'Products.LinguaPlone',
           # -*- Extra requirements: -*-
       ],
       extras_require = dict(
