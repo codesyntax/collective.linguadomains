@@ -1,0 +1,4 @@
+<layers>
+    <layer name="collective.linguadomains"
+           interface="collective.linguadomains.browser.interfaces.ILayer" />
+</layers>
