@@ -22,10 +22,12 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <subscriber
-     for="Products.CMFCore.interfaces.ISiteRoot
-          zope.app.publication.interfaces.IBeforeTraverseEvent"
-     handler=".validator.domainValidator" />
+  <browser:viewlet
+      name="collective.linguadomains"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".validator.URLValidator"
+      permission="zope2.View"
+      />
 
   <browser:page
     name="linguadomains-controlpanel"

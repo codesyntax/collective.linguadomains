@@ -3,7 +3,7 @@
  <configlet title="Lingua Domains" 
     action_id="collective.linguadomains"
     appId="collective.linguadomains"
-    category="Addons"
+    category="Products"
     condition_expr=""
     icon_expr="string:$portal_url/product_icon.png"
     url_expr="string:${portal_url}/@@linguadomains-controlpanel"

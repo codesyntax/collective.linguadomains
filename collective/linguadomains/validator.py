@@ -6,76 +6,92 @@ import os
 from urlparse import urlparse
 
 import logging
-logger = logging.getLogger('test')
+logger = logging.getLogger('collective.linguadomains')
+from plone.app.layout.viewlets.common import ViewletBase
 
-def domainValidator(site, event):
-    """Event handler on before traverse to check domain constraints
-    
-    purl, lang and settings are for testing purpose
+class URLValidator(ViewletBase):
+    """Viewlet that check language of the content page against translated url
+    if the language do not correspond to the content you will be redirected
+    to the same page with the corresponding URL
     """
+    def __init__(self, context, request, view, manager=None):
+        super(URLValidator, self).__init__(context, request, view,
+                                           manager=manager)
+        self.tests = None
+        self._settings = None
+        self._portal_url = None
 
-    request = event.request
+    def index(self):
+        """This viewlet check stuff, it doesn't display anythings"""
+        return u""
 
-    if hasattr(event, 'tests'):
-        purl = event.tests.get('purl')
-        lang = event.tests.get('lang')
-        settings = event.tests.get('settings')
+    def _plone_portal_state(self):
+        return component.queryMultiAdapter((self.context, self.request),
+                                           name="plone_portal_state")
 
-    else:
-        pstate = component.queryMultiAdapter((site, request),
-                                       name="plone_portal_state")
-        if pstate is None:
-            logger.info('no pstate')
+    def portal_url(self):
+        if self._portal_url is None:
+            pstate = self._plone_portal_state()
+            self._portal_url = pstate.portal_url()
+        return self._portal_url
+
+    def language(self):
+        return self.context.Language()
+
+    def settings(self):
+        if self._settings is None:
+            registry = component.queryUtility(IRegistry)
+            if registry is None:
+                logger.info('no registry')
+                return
+        
+            self._settings = registry.forInterface(interfaces.ISettingsSchema,
+                                                    check=False)
+        return self._settings
+
+    def update(self):
+        request = self.request
+        if self.request.get('donotcheck'):
             return
 
-        purl = pstate.portal_url()
-        lang = pstate.language()
+        purl = self.portal_url()
+        lang = self.language()
+        settings = self.settings()
 
-        registry = component.queryUtility(IRegistry)
-        if registry is None:
-            logger.info('no registry')
+        purl_parsed = urlparse(purl)
+        url_parsed = urlparse(request.get('ACTUAL_URL'))
+
+        if not settings:
             return
+
+        if not settings.activated:
+            return
+
+        mapping_raw = settings.mapping
+        mapping = {}
+        for value in mapping_raw:
+            url , langcode = value.split('|')
+            mapping[langcode] = url
+
+        if not mapping:
+            return
+
+        if not purl in mapping.values():
+            logger.info('URL not configured')
+            return
+
+        waited_url = mapping.get(lang,None)
+        if waited_url is None:
+            logger.info('Language not configured')
+            return
+        waited_url_parsed = urlparse(waited_url)
+
+        if purl  == waited_url:
+            return
+
+        base_path = purl_parsed.path
+        waited_path = url_parsed.path
+        redirect_url = waited_url + waited_path[len(base_path):]
     
-        settings = registry.forInterface(interfaces.ISettingsSchema,
-                                         check=False)
-
-    purl_parsed = urlparse(purl)
-    url_parsed = urlparse(request.get('ACTUAL_URL'))
-
-    if not settings:
-        logger.info('no settings')
-        return
-
-    if not settings.activated:
-        logger.info('not activated')
-        return
-
-    mapping_raw = settings.mapping
-    mapping = {}
-    for value in mapping_raw:
-        url , lang = value.split('|')
-        mapping[lang] = url
-
-    if not mapping:
-        logger.info('no mapping')
-        return
-
-    if not purl in mapping.values():
-        logger.info('portal url not in values')
-        return
-
-    waited_url = mapping[lang]
-    waited_url_parsed = urlparse(waited_url)
-
-    if purl  == waited_url:
-        return
-
-    #improve performance by trying to reduce html rendering
-    request['ajax_load'] = True
-
-    base_path = purl_parsed.path
-    waited_path = url_parsed.path
-    redirect_url = waited_url + waited_path[len(base_path):]
-
-    request.RESPONSE.redirect(redirect_url)
-    logger.info('REDIRECT !')
+        request.RESPONSE.redirect(redirect_url)
+        logger.info('REDIRECT')
