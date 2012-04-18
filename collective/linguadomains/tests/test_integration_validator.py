@@ -1,4 +1,5 @@
 import unittest2 as unittest
+from collective.linguadomains.tests import base
 from collective.linguadomains import validator
 
 class IntegrationTestValidator(base.IntegrationTestCase):
@@ -7,7 +8,7 @@ class IntegrationTestValidator(base.IntegrationTestCase):
     """
 
     def setUp(self):
-        super(IntegrationTestValidator, self).setup()
+        super(IntegrationTestValidator, self).setUp()
 
     def test_not_configure_url(self):
         pass

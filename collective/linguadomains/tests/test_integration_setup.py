@@ -7,7 +7,7 @@ class IntegrationTestSetup(base.IntegrationTestCase):
     """
 
     def test_controlpanel(self):
-        self.assertTrue(False)
+        self.portal.portal_controlpanel
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

@@ -13,7 +13,7 @@ class UnitTestValidator(base.UnitTestCase):
         self.viewlet = validator.URLValidator(context, request, None)
         self.viewlet._settings = utils.FakeSettings()
 
-    def test_not_configure_url(self):
+    def test_url_not_in_mapping(self):
         viewlet = self.viewlet
         viewlet._portal_url = 'http://nohost/plone'
         viewlet.update()
@@ -36,6 +36,22 @@ class UnitTestValidator(base.UnitTestCase):
         self.assertEqual(self.viewlet.request.RESPONSE.redirect_url,
                         'http://nohost-nl/plone/news')
 
+    def test_not_activated(self):
+        viewlet = self.viewlet
+        viewlet._settings.activated = False
+        viewlet._portal_url = 'http://nohost-fr/plone'
+        viewlet.context.lang = 'nl'
+        viewlet.update()
+        self.assertEqual(self.viewlet.request.RESPONSE.redirect_url,
+                        None)
+
+    def test_language_not_in_mapping(self):
+        viewlet = self.viewlet
+        viewlet._portal_url = 'http://nohost-fr/plone'
+        viewlet.context.lang = 'xx'
+        viewlet.update()
+        redirect_url = self.viewlet.request.RESPONSE.redirect_url
+        self.assertTrue(redirect_url is None)
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
