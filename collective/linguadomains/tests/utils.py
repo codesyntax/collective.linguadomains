@@ -1,3 +1,6 @@
+TEST_MAPPING = ['http://nohost/plone|en',
+                'http://nohost-fr/plone|fr',
+                'http://nohost-nl/plone|nl']
 class FakeContext:
     def __init__(self):
         self.lang = 'en'
@@ -23,6 +26,4 @@ class FakeRequest:
 class FakeSettings:
     def __init__(self):
         self.activated = True
-        self.mapping = ['http://nohost-en/plone|en',
-                        'http://nohost-fr/plone|fr',
-                        'http://nohost-nl/plone|nl']
+        self.mapping = TEST_MAPPING
