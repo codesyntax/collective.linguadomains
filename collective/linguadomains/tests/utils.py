@@ -18,7 +18,7 @@ class FakeResponse:
 class FakeRequest:
     def __init__(self):
         self.RESPONSE = FakeResponse()
-        self._data = {'ACTUAL_URL':'http://nohost-fr/plone/news'}
+        self._data = {}
 
     def get(self, key):
         return self._data.get(key)
@@ -27,3 +27,21 @@ class FakeSettings:
     def __init__(self):
         self.activated = True
         self.mapping = TEST_MAPPING
+
+class FakeManager:
+    def __init__(self, context, request):
+        self.portal_url = 'http://nohost/plone'
+        self.activated = True
+        self.mapping = {'en':'http://nohost/plone',
+                        'fr':'http://nohost-fr/plone',
+                        'nl':'http://nohost-nl/plone'}
+        self.translated_url = {'en':'http://nohost/plone',
+                               'fr':'http://nohost-fr/plone',
+                               'nl':'http://nohost-nl/plone'}
+        self.context = context
+        self.request = request
+
+    def get_translated_url(self):
+        lang = self.context.Language()
+        return self.translated_url.get(lang,
+                                       self.request.get('ACTUAL_URL'))

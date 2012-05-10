@@ -1,6 +1,7 @@
 import unittest2 as unittest
 from collective.linguadomains.tests import base, utils
 from collective.linguadomains import validator
+from zope.component.interfaces import ComponentLookupError
 
 class UnitTestValidator(base.UnitTestCase):
     """We tests the setup (install) of the addons. You should check all
@@ -11,47 +12,25 @@ class UnitTestValidator(base.UnitTestCase):
         context = utils.FakeContext()
         request = utils.FakeRequest()
         self.viewlet = validator.URLValidator(context, request, None)
-        self.viewlet._settings = utils.FakeSettings()
+        self.viewlet._manager = utils.FakeManager(context, request)
 
-    def test_url_not_in_mapping(self):
-        viewlet = self.viewlet
-        viewlet._portal_url = 'http://nohost/plone'
-        viewlet.update()
+    def test_render(self):
+        self.assertTrue(self.viewlet.index() == u"")
 
-        self.assertTrue(self.viewlet.request.RESPONSE.redirect_url is None)
+    def test_language(self):
+        self.assertEqual(self.viewlet.language(),
+                         self.viewlet.context.Language())
 
-    def test_good_url(self):
-        viewlet = self.viewlet
-        viewlet._portal_url = 'http://nohost-fr/plone'
-        viewlet.context.lang = 'fr'
-        viewlet.update()
-        redirect_url = self.viewlet.request.RESPONSE.redirect_url
-        self.assertTrue(redirect_url is None)
+    def test_get_manager(self):
+        self.assertEqual(self.viewlet.get_manager(),
+                         self.viewlet._manager)
+        self.viewlet._manager = None
+        self.assertRaises(ComponentLookupError,self.viewlet.get_manager)
 
-    def test_should_redirect(self):
-        viewlet = self.viewlet
-        viewlet._portal_url = 'http://nohost-fr/plone'
-        viewlet.context.lang = 'nl'
-        viewlet.update()
-        self.assertEqual(self.viewlet.request.RESPONSE.redirect_url,
-                        'http://nohost-nl/plone/news')
-
-    def test_not_activated(self):
-        viewlet = self.viewlet
-        viewlet._settings.activated = False
-        viewlet._portal_url = 'http://nohost-fr/plone'
-        viewlet.context.lang = 'nl'
-        viewlet.update()
-        self.assertEqual(self.viewlet.request.RESPONSE.redirect_url,
-                        None)
-
-    def test_language_not_in_mapping(self):
-        viewlet = self.viewlet
-        viewlet._portal_url = 'http://nohost-fr/plone'
-        viewlet.context.lang = 'xx'
-        viewlet.update()
-        redirect_url = self.viewlet.request.RESPONSE.redirect_url
-        self.assertTrue(redirect_url is None)
+    def test_donotcheck(self):
+        self.viewlet.request._data['donotcheck'] = True
+        self.assertEqual(self.viewlet.update(),
+                         None)
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

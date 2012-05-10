@@ -36,4 +36,10 @@
     permission="cmf.ManagePortal"
     />
 
+  <adapter
+    for="*
+         zope.publisher.interfaces.browser.IBrowserRequest"
+    factory=".controller.LinguaDomainsManager"
+    provides=".controller.ILinguaDomainsManager"/>
+
 </configure>

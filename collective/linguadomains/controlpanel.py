@@ -24,6 +24,13 @@ class ControlPanelForm(base.RegistryEditForm):
     schema = ISettingsSchema
     label = _(u"Domain validator control panel")
     #TODO: validate all urls !!!!
+    
+    def extractData(self):
+        data, errors = super(ControlPanelForm, self).extractData()
+        import pdb;pdb.set_trace()
+
+    def validate_mapping(self, mapping):
+        pass
 
 class ControlPanelView(base.ControlPanelFormWrapper):
     form = ControlPanelForm
