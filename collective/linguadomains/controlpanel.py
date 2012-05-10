@@ -27,7 +27,6 @@ class ControlPanelForm(base.RegistryEditForm):
     
     def extractData(self):
         data, errors = super(ControlPanelForm, self).extractData()
-        import pdb;pdb.set_trace()
 
     def validate_mapping(self, mapping):
         pass
