@@ -3,8 +3,9 @@ from plone.app.layout.viewlets.common import ViewletBase
 
 from collective.linguadomains import interfaces
 
-import logging
+import logging  # @UnresolvedImport
 logger = logging.getLogger('collective.linguadomains')
+
 
 class URLValidator(ViewletBase):
     """Viewlet that check language of the content page against translated url
@@ -25,7 +26,8 @@ class URLValidator(ViewletBase):
 
     def get_manager(self):
         if self._manager is None:
-            self._manager = component.getMultiAdapter((self.context, self.request),
+            self._manager = component.getMultiAdapter((self.context,
+                                                       self.request),
                                            interfaces.ILinguaDomainsManager)
         return self._manager
 

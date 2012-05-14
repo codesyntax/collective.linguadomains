@@ -1,15 +1,16 @@
-from urlparse import urlparse
+from urlparse import urlparse  # @UnresolvedImport
 from zope import component
 from zope import interface
 from plone.registry.interfaces import IRegistry
 from collective.linguadomains.controlpanel import ISettingsSchema
 
-import logging
+import logging  # @UnresolvedImport
 logger = logging.getLogger('collective.linguadomains')
+
 
 class ILinguaDomainsManager(interface.Interface):
     """Controller interface"""
-    
+
     def validate_urls(mapping=None, urls=None):
         """This method return True if provided URL exists.
         You can check by providing the mapping or a list of URL"""
@@ -25,6 +26,7 @@ class ILinguaDomainsManager(interface.Interface):
 
     def get_translated_url():
         """Return the translated url. if already translate, return it"""
+
 
 class LinguaDomainsManager(object):
     """Controller to check if domain name is translated and valide according
@@ -57,7 +59,7 @@ class LinguaDomainsManager(object):
             if registry is None:
                 logger.info('no registry')
                 return
-        
+
             self._settings = registry.forInterface(ISettingsSchema,
                                                     check=False)
         return self._settings
@@ -74,7 +76,7 @@ class LinguaDomainsManager(object):
         mapping_raw = settings.mapping
         mapping = {}
         for value in mapping_raw:
-            url , langcode = value.split('|')
+            url, langcode = value.split('|')
             mapping[langcode] = url
 
         return mapping
@@ -94,13 +96,12 @@ class LinguaDomainsManager(object):
             logger.info('URL not configured')
             return url
 
-        waited_url = mapping.get(lang,None)
+        waited_url = mapping.get(lang, None)
         if waited_url is None:
             logger.info('Language not configured')
             return url
-        waited_url_parsed = urlparse(waited_url)
 
-        if purl  == waited_url:
+        if purl == waited_url:
             return url
 
         purl_parsed = urlparse(purl)
@@ -109,5 +110,5 @@ class LinguaDomainsManager(object):
         base_path = purl_parsed.path
         waited_path = url_parsed.path
         redirect_url = waited_url + waited_path[len(base_path):]
-    
+
         return redirect_url

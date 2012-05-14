@@ -1,14 +1,13 @@
 import transaction
 import unittest2 as unittest
-from zope import interface
-from plone.app import testing
-from collective.linguadomains import testing
-from collective.linguadomains.tests import utils
+from plone.app import testing  # @UnresolvedImport
+
 
 class UnitTestCase(unittest.TestCase):
 
     def setUp(self):
         pass
+
 
 class IntegrationTestCase(unittest.TestCase):
 

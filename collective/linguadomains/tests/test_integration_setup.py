@@ -1,6 +1,7 @@
 import unittest2 as unittest
 from collective.linguadomains.tests import base
 
+
 class IntegrationTestSetup(base.IntegrationTestCase):
     """We tests the setup (install) of the addons. You should check all
     stuff in profile are well activated (browserlayer, js, content types, ...)
@@ -13,12 +14,14 @@ class IntegrationTestSetup(base.IntegrationTestCase):
 
     def test_registry(self):
         registry = self.portal.portal_registry
-        activated = registry.records.get('collective.linguadomains.controlpanel.ISettingsSchema.activated')
+        base = 'collective.linguadomains.controlpanel.ISettingsSchema'
+        activated = registry.records.get('%s.activated' % base)
         self.assertTrue(activated is not None)
-        self.assertTrue(activated.value)#check default value
-        mapping = registry.records.get('collective.linguadomains.controlpanel.ISettingsSchema.mapping')
+        self.assertTrue(activated.value)  # check default value
+        mapping = registry.records.get('%s.mapping' % base)
         self.assertTrue(mapping is not None)
         self.assertTrue(mapping.value == [])
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

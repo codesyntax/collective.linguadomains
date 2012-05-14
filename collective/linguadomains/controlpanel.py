@@ -1,15 +1,13 @@
-from urllib2 import urlopen
+from urllib2 import urlopen  # @UnresolvedImport
 from zope import interface
 from zope import schema
 from zope import i18nmessageid
-from z3c.form import error
 
-from plone.z3cform import layout
 from plone.app.registry.browser import controlpanel as base
 from plone.registry import field
-import socket
 from z3c.form.interfaces import WidgetActionExecutionError
 _ = i18nmessageid.MessageFactory('collective.domainvalidator')
+
 
 class ISettingsSchema(interface.Interface):
     """Settings for this addon"""
@@ -21,7 +19,7 @@ class ISettingsSchema(interface.Interface):
     mapping = schema.List(title=_(u"URL - Language mapping"),
                           default=[],
                           value_type=field.URI(title=_(u"URL|LANG"),
-                                               description=_(u"http://mysite.com|en")))
+                                       description=_(u"http://mysite.com|en")))
 
 
 class ControlPanelForm(base.RegistryEditForm):
@@ -45,9 +43,9 @@ class ControlPanelForm(base.RegistryEditForm):
         if errors is None:
             errors = ()
 
-        for mapping in data.get('mapping',None):
+        for mapping in data.get('mapping', None):
 
-            if len(mapping.split('|'))!=2:
+            if len(mapping.split('|')) != 2:
                 msg = _(u"must be of url|lang of a ISiteRoot")
                 self.raise_error_message(msg, field=mapping_field)
                 return data, errors
@@ -65,6 +63,7 @@ class ControlPanelForm(base.RegistryEditForm):
                 self.raise_error_message(msg, field=mapping_field)
 
         return data, errors
+
 
 class ControlPanelView(base.ControlPanelFormWrapper):
     form = ControlPanelForm

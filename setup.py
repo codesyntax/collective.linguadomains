@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import os
 
 version = '1.0a2.dev0'
 
@@ -32,9 +31,7 @@ setup(name='collective.linguadomains',
           'Products.LinguaPlone',
           # -*- Extra requirements: -*-
       ],
-      extras_require = dict(
-          tests=['plone.app.testing'],
-      ),
+      extras_require=dict(tests=['plone.app.testing']),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

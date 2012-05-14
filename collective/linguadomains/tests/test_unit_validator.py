@@ -3,6 +3,7 @@ from collective.linguadomains.tests import base, utils
 from collective.linguadomains import validator
 from zope.component.interfaces import ComponentLookupError
 
+
 class UnitTestValidator(base.UnitTestCase):
     """We tests the setup (install) of the addons. You should check all
     stuff in profile are well activated (browserlayer, js, content types, ...)
@@ -25,12 +26,13 @@ class UnitTestValidator(base.UnitTestCase):
         self.assertEqual(self.viewlet.get_manager(),
                          self.viewlet._manager)
         self.viewlet._manager = None
-        self.assertRaises(ComponentLookupError,self.viewlet.get_manager)
+        self.assertRaises(ComponentLookupError, self.viewlet.get_manager)
 
     def test_donotcheck(self):
         self.viewlet.request._data['donotcheck'] = True
         self.assertEqual(self.viewlet.update(),
                          None)
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
