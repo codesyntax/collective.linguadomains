@@ -3,7 +3,7 @@ from plone.app.layout.viewlets.common import ViewletBase
 
 from collective.linguadomains import interfaces
 
-import logging  # @UnresolvedImport
+import logging
 logger = logging.getLogger('collective.linguadomains')
 
 

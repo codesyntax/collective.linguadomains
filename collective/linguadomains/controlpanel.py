@@ -1,4 +1,4 @@
-from urllib2 import urlopen  # @UnresolvedImport
+from urllib2 import urlopen
 from zope import interface
 from zope import schema
 from zope import i18nmessageid

@@ -1,6 +1,7 @@
 import transaction
 import unittest2 as unittest
-from plone.app import testing  # @UnresolvedImport
+from collective.linguadomains import testing
+from plone.app import testing as ptesting
 
 
 class UnitTestCase(unittest.TestCase):
@@ -17,9 +18,9 @@ class IntegrationTestCase(unittest.TestCase):
         super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.request = self.layer['request']
-        testing.setRoles(self.portal, testing.TEST_USER_ID, ['Manager'])
+        ptesting.setRoles(self.portal, ptesting.TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory('Folder', 'test-folder')
-        testing.setRoles(self.portal, testing.TEST_USER_ID, ['Member'])
+        ptesting.setRoles(self.portal, ptesting.TEST_USER_ID, ['Member'])
         self.folder = self.portal['test-folder']
 
 

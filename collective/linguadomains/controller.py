@@ -1,10 +1,10 @@
-from urlparse import urlparse  # @UnresolvedImport
+from urlparse import urlparse
 from zope import component
 from zope import interface
 from plone.registry.interfaces import IRegistry
 from collective.linguadomains.controlpanel import ISettingsSchema
 
-import logging  # @UnresolvedImport
+import logging
 logger = logging.getLogger('collective.linguadomains')
 
 
