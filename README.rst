@@ -21,9 +21,36 @@ configured.
 
 Example::
 
-    http://www.brussels.irisnet.be|en
-    http://www.brussel.irisnet.be|nl
-    http://www.bruxelles.irisnet.be|fr
+    http://en.example.be|en
+    http://stagingen.example.be|en
+    http://deven.example.be|en
+    http://nl.example.be|nl
+    http://stagingnl.example.be|nl
+    http://devnl.example.be|nl
+    http://fr.example.be|fr
+    http://stagingfr.example.be|fr
+    http://devfr.example.be|fr
+
+IMPORTANT: The choice is based on the order.
+
+You can also configure using registry.xml in your generic setup profile::
+
+  <records interface="collective.linguadomains.interfaces.ISettingsSchema">
+     <value key="activated">True</value>
+     <value key="mapping">
+        <element>http://fr.example.be|fr</element>
+        <element>http://stagingfr.example.be|fr</element>
+        <element>http://devfr.example.be|fr</element>
+
+        <element>http://nl.example.be|nl</element>
+        <element>http://stagingnl.example.be|nl</element>
+        <element>http://devnl.example.be|nl</element>
+
+        <element>http://en.example.be|en</element>
+        <element>http://stagingen.example.be|en</element>
+        <element>http://deven.example.be|en</element>
+     </value>
+  </records>
 
 Credits
 =======

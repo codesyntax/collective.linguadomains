@@ -1,6 +1,9 @@
 TEST_MAPPING = ['http://nohost/plone|en',
                 'http://nohost-fr/plone|fr',
-                'http://nohost-nl/plone|nl']
+                'http://nohost-nl/plone|nl',
+                'http://testhost/plone|en',
+                'http://testhost-fr/plone|fr',
+                'http://testhost-nl/plone|nl']
 
 
 class FakeContext:

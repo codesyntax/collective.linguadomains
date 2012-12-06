@@ -74,10 +74,14 @@ class LinguaDomainsManager(object):
             return
 
         mapping_raw = settings.mapping
-        mapping = {}
+        mapping = {'all':[]}
         for value in mapping_raw:
             url, langcode = value.split('|')
-            mapping[langcode] = url
+            if langcode in mapping:
+                mapping[langcode].append(url)
+            else:
+                mapping[langcode] = [url]
+            mapping['all'].append(url)
 
         return mapping
 
@@ -92,17 +96,33 @@ class LinguaDomainsManager(object):
         if not mapping:
             return url
 
-        if not purl in mapping.values():
+        if purl not in mapping['all']:
             logger.info('URL not configured')
             return url
 
-        waited_url = mapping.get(lang, None)
-        if waited_url is None:
+        waited_urls = mapping.get(lang, None)
+        if waited_urls is None:
             logger.info('Language not configured')
             return url
 
-        if purl == waited_url:
+        if purl in waited_urls:
             return url
+
+        if len(waited_urls) > 1:
+            #I need the indice
+            purl_index = None
+            for key in mapping:
+                if key == 'all':
+                    continue
+                if key == lang:
+                    continue
+                try:
+                    purl_index = mapping[key].index(purl)
+                    waited_url = waited_urls[purl_index] #same index
+                except ValueError:
+                    continue
+        else:
+            waited_url = waited_urls[0]
 
         purl_parsed = urlparse(purl)
         url_parsed = urlparse(url)
