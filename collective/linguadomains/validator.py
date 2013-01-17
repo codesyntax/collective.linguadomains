@@ -43,5 +43,5 @@ class URLValidator(ViewletBase):
         if url == redirect_url:
             return
 
-        request.RESPONSE.redirect(redirect_url)
+        request.RESPONSE.redirect(redirect_url, status=301)
         logger.info('REDIRECT')
