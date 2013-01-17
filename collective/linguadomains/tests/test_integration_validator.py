@@ -34,7 +34,7 @@ class IntegrationTestValidator(base.IntegrationTestCase):
         self.set_url('http://nohost-fr')
         self.folder.setLanguage('nl')
         self.viewlet.update()
-        self.assertTrue(self.request.RESPONSE.status == 302)
+        self.assertTrue(self.request.RESPONSE.status == 301)
 
     def test_not_activated(self):
         base = 'collective.linguadomains.controlpanel.ISettingsSchema'
