@@ -88,8 +88,6 @@ class LinguaDomainsManager(object):
     def get_translated_url(self):
 
         url = self.request.get('ACTUAL_URL')
-        if "@@deploy-custom-static" in url:
-            return url
         purl = self.portal_url()
         lang = self.language()
 
